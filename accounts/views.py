@@ -1,11 +1,34 @@
 from django.shortcuts import render
+from accounts.models import *
 
 # Create your views here.
-def index(request):
-    return render(request,'pages/dashboard.html')
+def indexView(request):
+    customers = Customer.objects.all()
+    orders = Order.objects.all()
+    total_order = orders.count()
+    total_delivered = orders.filter(status='Delivered').count()
+    total_pending = orders.filter(status='Pending').count()
 
-def Product(request):
-    return render(request,'pages/product.html')
+    context = {
+        'customers':customers,
+        'orders':orders,
+        'total_order':total_order,
+        'total_delivered':total_delivered,
+        'total_pending':total_pending
+    }
+    return render(request,'pages/dashboard.html',context)
 
-def Customer(request):
-    return render(request,'pages/customers.html')
+def ProductView(request):
+    products = Product.objects.all()
+    return render(request,'pages/product.html',{'products':products})
+
+def CustomerView(request,pk):
+    customer = Customer.objects.get(id=pk)
+    orders = customer.order_set.all()
+    total_order = orders.count()
+    context = {
+        'customer':customer,
+        'orders':orders,
+        'total_order':total_order
+    }
+    return render(request,'pages/customers.html',context)

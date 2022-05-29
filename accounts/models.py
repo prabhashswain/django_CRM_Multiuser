@@ -36,7 +36,7 @@ class Product(DateStatus):
     tag = models.ManyToManyField(Tag)
 
     def __str__(self) -> str:
-        return f"<Product {self.name} />"
+        return self.name
 
 class Order(DateStatus):
     STATUS = (
@@ -50,4 +50,4 @@ class Order(DateStatus):
 
 
     def __str__(self) -> str:
-        return f"<Order {self.status} />"
+        return self.status
