@@ -21,6 +21,7 @@
                 <tr>
                     <td>{{customer.name}}</td>
                     <td>{{customer.phone}}</td>
+                    <td><a href="{% url 'customer' customer.id %}">view</a></td>
                 </tr>
                 {% endfor %}
             </table>
