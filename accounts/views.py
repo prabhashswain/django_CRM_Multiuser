@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from accounts.filters import OrderFilter
-from accounts.forms import OrderForm,UserForm
+from accounts.forms import CustomerForm, OrderForm,UserForm
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
@@ -10,6 +10,7 @@ from accounts.decorators import admin_only, unauthenticated_user,allowed_user_pe
 
 
 # Create your views here.
+@unauthenticated_user
 def registerView(request):
     form = UserForm()
     context = {'form':form}
@@ -136,3 +137,17 @@ def DeleteOrderView(request,pk):
     order.delete()
     return redirect('home')
 
+@login_required(login_url='login')
+@allowed_user_permission(allowed_user=['customer'])
+def accountSettingView(request):
+    customer = request.user.customer
+    form = CustomerForm(instance=customer)
+    context = {
+        'form':form
+    }
+    if request.method == "POST":
+        form = CustomerForm(request.POST,request.FILES,instance=customer)
+        if form.is_valid():
+            form.save()
+            return redirect('settings')
+    return render(request,'pages/account_settings.html',context)

@@ -10,10 +10,11 @@ class DateStatus(models.Model):
 
 # Create your models here.
 class Customer(DateStatus):
-    user = models.OneToOneField(User,null=True,on_delete=models.CASCADE)
+    user = models.OneToOneField(User,null=True,blank=True,on_delete=models.CASCADE)
     name = models.CharField(max_length=100,null=True)
     phone = models.CharField(max_length=100,null=True)
     email = models.CharField(max_length=100,null=True)
+    profile_pic = models.ImageField(null=True,blank=True,default='profile.png')
     
 
     def __str__(self) -> str:
