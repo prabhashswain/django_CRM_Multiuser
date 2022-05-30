@@ -1,0 +1,13 @@
+{% extends 'main.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+<h5>{{title}}</h5>
+<form action="" method="post"  class="uniForm">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button type="submit" class="btn btn-sm btn-info">CREATE</button>
+</form>
+{% endblock %}

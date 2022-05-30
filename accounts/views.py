@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from accounts.forms import OrderForm
 from accounts.models import *
 
 # Create your views here.
@@ -32,3 +33,36 @@ def CustomerView(request,pk):
         'total_order':total_order
     }
     return render(request,'pages/customers.html',context)
+
+def CreateOrderView(request):
+    form = OrderForm()
+    context = {
+        'form':form,
+        'title':'Create Order'
+    }
+    if request.method == "POST":
+        order = OrderForm(request.POST)
+        if order.is_valid():
+            order.save()
+            return redirect('home')
+    return render(request,'pages/create_order.html',context)
+
+def UpdateOrderView(request,pk):
+    order = Order.objects.get(id=pk)
+    form = OrderForm(instance=order)
+    context = {
+        'form':form,
+        'title':'Update Order'
+    }
+    if request.method == "POST":
+        f = OrderForm(request.POST,instance=order)
+        if f.is_valid():
+            f.save()
+            return redirect('home')
+    return render(request,'pages/create_order.html',context)
+
+def DeleteOrderView(request,pk):
+    order = Order.objects.get(id=pk)
+    order.delete()
+    return redirect('home')
+
