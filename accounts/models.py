@@ -15,7 +15,7 @@ class Customer(DateStatus):
     
 
     def __str__(self) -> str:
-        return f"<Customer {self.name} />"
+        return self.name
 
 class Tag(DateStatus):
     name = models.CharField(max_length=100,null=True)
