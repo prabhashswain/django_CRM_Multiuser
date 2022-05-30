@@ -12,7 +12,7 @@
 			<h5>Customer:</h5>
 			<hr>
 			<a class="btn btn-outline-info  btn-sm btn-block" href="">Update Customer</a>
-			<a class="btn btn-outline-danger  btn-sm btn-block" href="">Delete Customer</a>
+			<a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'create-order' customer.id %}">Place Order</a>
 
 		</div>
 	</div>
@@ -41,7 +41,7 @@
 	<div class="col">
 		<div class="card card-body">
 			<form method="get">
-
+				{{myfilter.form}}
 		    <button class="btn btn-primary" type="submit">Search</button>
 		  </form>
 		</div>
@@ -68,8 +68,8 @@
 					<td>{{order.product.category}}</td>
 					<td>{{order.created_at}}</td>
 					<td>{{order.status}}</td>
-					<td><a class="btn btn-sm btn-warning" href="">update</a></td>
-					<td><a class="btn btn-sm btn-danger" href="">delete</a></td>
+					<td><a class="btn btn-sm btn-warning" href="{% url 'update-order' order.id %}">update</a></td>
+                    <td><a class="btn btn-sm btn-danger" href="{% url 'delete-order' order.id %}">delete</a></td>
 				</tr>
 				{% endfor %}
 			</table>
