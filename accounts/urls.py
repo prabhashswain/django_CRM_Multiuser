@@ -7,6 +7,7 @@ urlpatterns = [
     path('login',views.loginView,name='login'),
     path('logout',views.logoutView,name='logout'),
     path('user-page',views.userView,name='user-page'),
+    path('settings',views.accountSettingView,name='settings'),
     path('products',views.ProductView,name='product' ),
     path('customers/<int:pk>',views.CustomerView,name='customer'),
     path('create-order/<int:pk>',views.CreateOrderView,name='create-order'),
