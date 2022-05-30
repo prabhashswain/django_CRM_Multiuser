@@ -3,7 +3,6 @@ from accounts.filters import OrderFilter
 from accounts.forms import CustomerForm, OrderForm,UserForm
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import Group
 from django.contrib import messages
 from accounts.models import *
 from accounts.decorators import admin_only, unauthenticated_user,allowed_user_permission
@@ -17,12 +16,7 @@ def registerView(request):
     if request.method == "POST":
         form = UserForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            group = Group.objects.get(name='customer')
-            user.groups.add(group)
-            Customer.objects.create(
-                user = user
-            )
+            form.save()
             return redirect('login')
     return render(request,'auth/register.html',context)
 
