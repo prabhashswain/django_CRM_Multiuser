@@ -3,8 +3,10 @@ from accounts.filters import OrderFilter
 from accounts.forms import OrderForm,UserForm
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
 from django.contrib import messages
 from accounts.models import *
+from accounts.decorators import admin_only, unauthenticated_user,allowed_user_permission
 
 
 # Create your views here.
@@ -12,12 +14,18 @@ def registerView(request):
     form = UserForm()
     context = {'form':form}
     if request.method == "POST":
-        user = UserForm(request.POST)
-        if user.is_valid():
-            user.save()
+        form = UserForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            group = Group.objects.get(name='customer')
+            user.groups.add(group)
+            Customer.objects.create(
+                user = user
+            )
             return redirect('login')
     return render(request,'auth/register.html',context)
 
+@unauthenticated_user
 def loginView(request):
     if request.method == "POST":
         username = request.POST.get("username")
@@ -36,7 +44,9 @@ def logoutView(request):
     return redirect('login')
 
 @login_required(login_url='login')
+@admin_only
 def indexView(request):
+    print(request.user)
     customers = Customer.objects.all()
     orders = Order.objects.all()
     total_order = orders.count()
@@ -53,6 +63,22 @@ def indexView(request):
     return render(request,'pages/dashboard.html',context)
 
 @login_required(login_url='login')
+@allowed_user_permission(allowed_user=['customer'])
+def userView(request):
+    orders = request.user.customer.order_set.all()
+    total_order = orders.count()
+    total_delivered = orders.filter(status='Delivered').count()
+    total_pending = orders.filter(status='Pending').count()
+    context = {
+        'orders':orders,
+        'total_order':total_order,
+        'total_delivered':total_delivered,
+        'total_pending':total_pending
+    }
+    return render(request,'pages/user.html',context)
+
+@login_required(login_url='login')
+@allowed_user_permission(allowed_user=['admin'])
 def ProductView(request):
     products = Product.objects.all()
     return render(request,'pages/product.html',{'products':products})

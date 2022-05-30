@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class DateStatus(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -9,13 +10,14 @@ class DateStatus(models.Model):
 
 # Create your models here.
 class Customer(DateStatus):
+    user = models.OneToOneField(User,null=True,on_delete=models.CASCADE)
     name = models.CharField(max_length=100,null=True)
     phone = models.CharField(max_length=100,null=True)
     email = models.CharField(max_length=100,null=True)
     
 
     def __str__(self) -> str:
-        return self.name
+        return self.user.username
 
 class Tag(DateStatus):
     name = models.CharField(max_length=100,null=True)

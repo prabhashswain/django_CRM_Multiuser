@@ -1,0 +1,33 @@
+{% extends 'main.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+
+{% include 'layout/status.html' %}
+
+<div class="row">
+	<div class="col-md">
+		<div class="card card-body">
+			<table class="table table-sm">
+				<tr>
+					<th>Product</th>
+					<th>Category</th>
+					<th>Date Ordered</th>
+					<th>Status</th>
+				</tr>
+				{% for order in orders %}
+				<tr>
+					<td>{{order.product}}</td>
+					<td>{{order.product.category}}</td>
+					<td>{{order.created_at}}</td>
+					<td>{{order.status}}</td>
+				</tr>
+				{% endfor %}
+			</table>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}
